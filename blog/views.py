@@ -55,7 +55,7 @@ def create_post(request):
 		pass
 	elif request.method == 'POST':
 		new_post = Post()
-		new_post.tilte = request.POST.get('tilte')
+		new_post.title = request.POST.get('title')
 		new_post.content = request.POST.get('content')
 
 		category_pk = request.POST.get('category')
