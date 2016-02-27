@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+			<title>글 목록</title>
+			<meta charset="UTF-8" />
+
+	</head>
+
+	<body>
+	
+		<div class="post_content">
+			<h3><a href="/posts/{{ post.pk }}/">{{ post.title }}</a></h3>
+	
+			<div class="post_content">
+				{{ post.content }}
+			</div>
+		</div>
+
+		<div>
+			<p>글 갈래 : {{ post.category.name }} </p>
+			<p>작성일시 : {{ post.created_at }} </p>
+		</div>
+
+
+	</body>
+
+</html>

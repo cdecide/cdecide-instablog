@@ -22,9 +22,6 @@ class Comment(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 
-	class Meta:
-		ordering = ('pk', '-updated_at')
-
 	def __str__(self):
    		return '{} - {} - {}'.format(self.pk, self.post.pk, self.content)
 
