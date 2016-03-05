@@ -1,45 +1,40 @@
-
 # blog/models.py
 from django.db import models
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=40)
+
+
 class Post(models.Model):
-    title = models.CharField(max_length=200)
+    category = models.ForeignKey(Category)
+    title = models.CharField(max_length=200, db_index=True)
     content = models.TextField()
     tags = models.ManyToManyField('Tag')
-    category = models.ForeignKey('Category')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     is_model_field = False
 
+#    class Meta:
+#        ordering = ('-updated_at', '-pk', )
+
     def __str__(self):
-   		return '{} - {} - {}'.format(self.pk, self.title, self.category.pk)
+        return '{} - {}'.format(self.pk, self.title)
+
 
 class Comment(models.Model):
-	post = models.ForeignKey(Post)
-	content = models.TextField(max_length=500)
-	created_at = models.DateTimeField(auto_now_add=True)
-	updated_at = models.DateTimeField(auto_now=True)
+    post = models.ForeignKey(Post)
+    content = models.TextField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-	def __str__(self):
-   		return '{} - {} - {}'.format(self.pk, self.post.pk, self.content)
+    def __str__(self):
+        return '{} of {}'.format(self.pk, self.post.pk)
+
 
 class Tag(models.Model):
-	name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40)
 
-	def __str__(self):
-   		return '{} - {}'.format(self.pk, self.name)
-
-class Category(models.Model):
-	name = models.CharField(max_length=40)
-
-	def __str__(self):
-		return '{} - {}'.format(self.pk, self.name)
-
-
-
-		
-		
-
-
+    def __str__(self):
+        return self.name

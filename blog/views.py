@@ -7,7 +7,9 @@ from django.core.paginator import Paginator
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import EmptyPage
 
-from .models import Post, Category
+from .models import Post
+from .models import Category
+from .forms import PostForm
 
 
 def hello(request):
@@ -48,26 +50,30 @@ def view_post(request, pk):
         'post': the_post,
     })
 
+
 def create_post(request):
-	categories = Category.objects.all()
-	
-	if request.method == 'GET':
-		pass
-	elif request.method == 'POST':
-		new_post = Post()
-		new_post.title = request.POST.get('title')
-		new_post.content = request.POST.get('content')
+    categories = Category.objects.all()
 
-		category_pk = request.POST.get('category')
-		category = get_object_or_404(Category, pk=category_pk)
-		new_post.category = category
-		new_post.save()
+    if request.method == 'GET':
+        form = PostForm()
+    elif request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            new_post = Post()
+            new_post.title = form.cleaned_data.get('title')
+            new_post.content = form.cleaned_data['content']
 
-		return redirect('view_post', pk=new_post.pk)
+            category_pk = request.POST.get('category')
+            category = get_object_or_404(Category, pk=category_pk)
+            new_post.category = category
+            new_post.save()
 
-	return render(request, 'create_post.html', {
-		'categories': categories,
-	})
+            return redirect('view_post', pk=new_post.pk)
+
+    return render(request, 'create_post.html', {
+        'categories': categories,
+        'form': form,
+    })
 
 
 
